@@ -1,5 +1,9 @@
 <script setup>
+
   import { ref, watch} from 'vue'
+import { userRegisterService, userLoginService } from '@/api/user.js'
+import router from '@/router'
+  
 //控制注册和登录的表单
   const isRegister = ref(true)
 const form = ref()
@@ -13,7 +17,7 @@ const form = ref()
   const rules = {
     username: [
       { required: true, message: '请输入用户名', trigger: 'blur'},
-      { min: 5, max: 10, message: '用户名必须是5-10位',trigger: 'blur'}
+      { min: 2, max: 10, message: '用户名必须是2-10位',trigger: 'blur'}
     ],
     password: [
       { required: true, message: '请输入密码', trigger: 'blur'},
@@ -51,11 +55,15 @@ watch(isRegister,()=> {
 // 注册成功之前，先进行校验，校验成功 -> 请求，校验失败 ->自动提示
 const register = async () => {
   await form.value.validate()
+  await userRegisterService(formModel.value)
 }
 
   // 登录
   const login = async () => {
     await form.value.validate()
+    await userLoginService(formModel.value)
+    // 登录成功之后，跳转到首页
+    router.push('/')
   }
 </script>
 
@@ -121,7 +129,7 @@ const register = async () => {
 
 <style lang="scss" scoped>
 .login-page {
-  height: 98.3vh;
+  height: 97.5vh;
   margin: 0;
   background-color: #fff;
 
