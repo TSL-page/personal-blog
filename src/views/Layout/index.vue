@@ -165,7 +165,7 @@ const handleCommand = (command) => {
 <style lang="scss" scoped>
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 100%;
-  height: 500px;
+  height: 99%;
   background-color: #F5F5DC;
 }
 .stable {
@@ -236,7 +236,7 @@ const handleCommand = (command) => {
     display: flex;
     .left-nav {
       transition: all 0.3s;
-      height: 73vh;
+      height: 80vh;
       width: 200px;
       min-width: 200px;
       max-width: 200px;
@@ -249,13 +249,24 @@ const handleCommand = (command) => {
     .contain {
       flex: 1;
       height: 100%;
+      .content {
+        width: 96%;
+        height: 520px;
+        margin: 2% 2% 0 2%;
+        border-radius: 5px;
+        background-color: #F5F5F5;
+        overflow: auto;         // 超出部分出现滚动条
+        box-sizing: border-box; 
+      }
     }
   }
   .footer {
     width: 100%;
-    height: 100px;
+    height: 58px;
     background-image: url('@/assets/layout/animals.png');
-    background-size: cover;
+    background-size: contain;
+    background-position: center;
+    margin: 0 -2%;
   }
 }
 
