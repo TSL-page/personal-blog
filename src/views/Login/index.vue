@@ -6,7 +6,7 @@ import { useUserStore } from '@/stores/modules/user'
 import { ElMessage } from 'element-plus'
 const userStore = useUserStore()
 //控制注册和登录的表单
-const isRegister = ref(true)
+const isRegister = ref(false)
 const form = ref()
 // 整个的用于提交的form数据对象
   const formModel = ref({
@@ -104,7 +104,7 @@ const register = async () => {
         </el-form-item>
         <el-form-item class="flex">
           <el-link type="info" @click="isRegister = false">
-            ← 返回
+            ← 登录
           </el-link>
         </el-form-item>
       </el-form>
