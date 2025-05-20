@@ -1,11 +1,12 @@
 <script setup>
-
-  import { ref, watch} from 'vue'
+import { ref, watch} from 'vue'
 import { userRegisterService, userLoginService } from '@/api/user.js'
 import router from '@/router'
-  
+import { useUserStore } from '@/stores/modules/user'
+import { ElMessage } from 'element-plus'
+const userStore = useUserStore()
 //控制注册和登录的表单
-  const isRegister = ref(true)
+const isRegister = ref(true)
 const form = ref()
 // 整个的用于提交的form数据对象
   const formModel = ref({
@@ -14,6 +15,7 @@ const form = ref()
     repassword: ''
   })
 
+  // 表单校验规则
   const rules = {
     username: [
       { required: true, message: '请输入用户名', trigger: 'blur'},
@@ -42,7 +44,6 @@ const form = ref()
   }
 
 
-
 // 切换的时候，重置表单内容
 watch(isRegister,()=> {
   formModel.value = {
@@ -54,16 +55,27 @@ watch(isRegister,()=> {
 
 // 注册成功之前，先进行校验，校验成功 -> 请求，校验失败 ->自动提示
 const register = async () => {
-  await form.value.validate()
-  await userRegisterService(formModel.value)
+  try {
+    await form.value.validate()
+    await userRegisterService(formModel.value)
+    ElMessage.success('注册成功')
+    isRegister.value = false
+  } catch (err) {
+    ElMessage.error('该账户已经存在')
+  }
 }
 
   // 登录
   const login = async () => {
-    await form.value.validate()
-    await userLoginService(formModel.value)
-    // 登录成功之后，跳转到首页
-    router.push('/')
+    try {
+      await form.value.validate()
+      const res = await userLoginService(formModel.value)
+      userStore.setToken(res.data.data.token)
+      ElMessage.success('登录成功')
+      router.push('/layout')
+    } catch (err) {
+      ElMessage.error('登录失败，请检查用户名或密码')
+    }
   }
 </script>
 
