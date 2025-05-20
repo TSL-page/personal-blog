@@ -1,45 +1,63 @@
 <script setup>
 import { ref } from "vue";
-import { getArticleList } from "@/api/article.js";
-import { formatTime } from "@/utils/format.js";
+import { getArticleList, deleteArticle } from "@/api/article.js";
+import { formatTime } from "@/utils/format.js"; // 时间格式化
+import { ElMessageBox } from 'element-plus'
 import { 
   Edit, 
   Delete 
 } from "@element-plus/icons-vue";
 // 分页
 const loading = ref(false) // loading状态
-const articleList = ref([]) // 文章列表
+const allArticles = ref([])   // 所有文章
+const articleList = ref([])   // 当前页显示的文章
 const total = ref(0) // 文章总条数
 // 定义请求参数对象
 const params = ref({
   pagenum: 1, // 当前页
   pagesize: 5, // 当前生效的每页条数
-  cate_id: "",
-  state: "",
 })
-
-// 获取文章列表
-const ArticleList = async() => {
-  const res = await getArticleList(params.value)
-  articleList.value = res.data.data
-  total.value = res.data.total
+// 获取所有文章列表
+const getAllArticles = async() => {
+  loading.value = true
+  const res = await getArticleList()
+  allArticles.value = res.data.data
+  total.value = allArticles.value.length
+  setPageData()
   loading.value = false
 }
-ArticleList()
-console.log(total.value)
-
+// 每一页
+const setPageData = () => {
+  const start = (params.value.pagenum - 1) * params.value.pagesize
+  const end = params.value.pagenum * params.value.pagesize
+  articleList.value = allArticles.value.slice(start, end)
+}
 // 分页逻辑
 const onSizeChange = (size) => {
   // 每页条数变化了，重新渲染
   params.value.pagenum = 1
   params.value.pagesize = size
-  ArticleList()
+  setPageData()
 }
 const onCurrentChange = (page) => {
   params.value.pagenum = page
-  ArticleList()
+  setPageData()
 }
+getAllArticles()
 
+// 删除
+const onDeletearticle = async(row) => {
+  await ElMessageBox.confirm('是否删除该文章?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async() => {
+    await deleteArticle(row.articleId)
+    getAllArticles()
+  }).catch(() => {
+    ElMessageBox.close()
+  })
+}
 </script>
 
 <template>
@@ -86,12 +104,15 @@ const onCurrentChange = (page) => {
       <el-table-column label="文章状态" prop="status" align="center"></el-table-column>
       <el-table-column label="操作" align="center">
         <template #default="{ row }">
-          <el-button cicle plian type="primary" :icon="Edit" @click="onEditevent(row)"></el-button>
-          <el-button cicle plian type="danger" :icon="Delete" @click="onDeleteevent(row)"></el-button>
+          <el-tooltip content="编辑" placement="top">
+            <el-button circle plain type="primary" :icon="Edit" @click="onEditarticle(row)"></el-button>
+          </el-tooltip>
+          <el-tooltip content="删除" placement="top">
+            <el-button circle plain type="danger" :icon="Delete" @click="onDeletearticle(row)"></el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
-
     <el-pagination v-model:current-page="params.pagenum" v-model:page-size="params.pagesize" @size-change="onSizeChange"
       @current-change="onCurrentChange" :total="total" class="pagination" background="true"
       layout="total, sizes, prev, pager, next, jumper" :page-sizes="[3, 5, 7, 10]"
@@ -131,8 +152,12 @@ const onCurrentChange = (page) => {
     }
     .table {
       width: 95%;
-      margin: 2% ;
-      overflow: hidden;
+      margin: 0 2% ;
+    }
+    .pagination {
+      width: 100%;
+      display: flex;
+      justify-content: center;
     }
   }
 </style>

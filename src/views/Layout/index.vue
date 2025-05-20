@@ -170,6 +170,7 @@ const handleCommand = (command) => {
 }
 .stable {
   width: 100%;
+  height: 100%;
   .top {
     width: 100%;
     height: 100%;
@@ -249,6 +250,8 @@ const handleCommand = (command) => {
     .contain {
       flex: 1;
       height: 100%;
+      margin: 0;
+      padding: 0;
       .content {
         width: 96%;
         height: 520px;
@@ -256,7 +259,9 @@ const handleCommand = (command) => {
         border-radius: 5px;
         background-color: #F5F5F5;
         overflow: auto;         // 超出部分出现滚动条
-        box-sizing: border-box; 
+          scrollbar-width: thin;
+          /* Firefox */
+          scrollbar-color: #ccc #f5f5f5;
       }
     }
   }
