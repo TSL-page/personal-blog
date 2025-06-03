@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { useUserStore } from '../stores/modules/user'
 
 const baseURL = 'http://1.95.116.204:8868'
 
@@ -11,11 +10,16 @@ const instance = axios.create({
 // 请求拦截器
 instance.interceptors.request.use(
   config => {
-    // 直接从 localStorage 读取 token
-    const token = localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user')).token
-      : ''
-      console.log('当前请求携带的token:', token)
+    const userStr = localStorage.getItem('user')
+    let token = ''
+    if (userStr) {
+      try {
+        const user = JSON.parse(userStr)
+        token = user.token || ''
+      } catch (error) {
+        console.error('Failed to parse user from localStorage:', error)
+      }
+    }
     if (token) {
       config.headers.Authorization = 'Bearer ' + token
     }
@@ -23,5 +27,5 @@ instance.interceptors.request.use(
   },
   error => Promise.reject(error)
 )
+
 export default instance
-export { baseURL }

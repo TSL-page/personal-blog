@@ -27,7 +27,8 @@ const router = createRouter({
         { path: '/profile', component: Profile }, // 基本资料
         { path: '/password', component: Password } // 修改密码
       ]
-    },    
+    },
+    { path: '/front-layout'}    
   ]
 })
 

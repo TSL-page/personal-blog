@@ -12,7 +12,6 @@ const tableHeaders = [
   { title: '更新时间', span: 5 },
   { title: '操作', span: 4 }
 ]
-// 新增：时间格式化函数
 const formatDate = (timeStr) => {
   if (!timeStr) return ''
   const date = new Date(timeStr)
@@ -103,7 +102,6 @@ onMounted(() => {
   padding: 0;
 }
 
-/* 覆盖 el-table 默认边框样式（与原设计一致） */
 .el-table {
   border: 1px solid #e5e7eb;
   border-radius: 6px;

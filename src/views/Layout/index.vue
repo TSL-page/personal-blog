@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { reactive } from 'vue'
 import router from '@/router'
 import { useUserStore } from '@/stores/modules/user'
+import { getUserMessage } from '@/api/user'
 const userStore = useUserStore()
 import {
   Document,
@@ -79,7 +80,7 @@ const handleCommand = (command) => {
 }
 
 onMounted(() => {
-  userStore.getUserMessage()
+  getUserMessage()
   console.log(userStore.message);
   
 })

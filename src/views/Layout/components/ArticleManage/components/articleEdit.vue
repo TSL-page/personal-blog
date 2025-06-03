@@ -48,28 +48,7 @@ const open = async (row) => {
     imgUrl.value = ''
   }
 }
-// 将网络图片地址转换为file对象的函数
-async function imageUrlToFileObject(imageUrl, filename) {
-  try {
-    // 使用 Axios 下载图片数据
-    const response = await axios.get(imageUrl, { responseType: 'arraybuffer' })
 
-    // 将下载的数据转换成 Blob 对象
-    const blob = new Blob([response.data], {
-      type: response.headers['content-type']
-    })
-
-    // 创建 File 对象
-    const file = new File([blob], filename, {
-      type: response.headers['content-type']
-    })
-
-    return file
-  } catch (error) {
-    console.error('Error converting image URL to File object:', error)
-    return null
-  }
-}
 
 // 提交表单
 const emit = defineEmits(['success'])
