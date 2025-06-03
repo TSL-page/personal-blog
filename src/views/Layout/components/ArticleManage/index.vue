@@ -1,8 +1,10 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch} from "vue";
 import { getArticleList, deleteArticle } from "@/api/article.js";
 import { formatTime } from "@/utils/format.js"; // 时间格式化
 import { ElMessageBox } from 'element-plus'
+import ArticleEdit from "./components/articleEdit.vue";
+import channelSelect from "./components/channelSelect.vue";
 import { 
   Edit, 
   Delete 
@@ -12,15 +14,22 @@ const loading = ref(false) // loading状态
 const allArticles = ref([])   // 所有文章
 const articleList = ref([])   // 当前页显示的文章
 const total = ref(0) // 文章总条数
+
+const articleEditRef = ref(null);
 // 定义请求参数对象
 const params = ref({
   pagenum: 1, // 当前页
   pagesize: 5, // 当前生效的每页条数
 })
+
+// 排序规则
+const order_key = ref('1')
 // 获取所有文章列表
 const getAllArticles = async() => {
   loading.value = true
-  const res = await getArticleList()
+  const res = await getArticleList({
+    order_key:order_key.value
+  })
   allArticles.value = res.data.data
   total.value = allArticles.value.length
   setPageData()
@@ -45,6 +54,27 @@ const onCurrentChange = (page) => {
 }
 getAllArticles()
 
+
+// 编辑
+const onEditarticle = (row) => {
+  articleEditRef.value.open(row)
+}
+
+// 添加逻辑
+const onAddarticle = () => {
+  articleEditRef.value.open()
+}
+
+// 添加或者编辑的回调
+const onSuccess = (type) => {
+  if (type === "add") {
+    const lastPage = Math.ceil(allArticles.value.length / params.value.pagesize)
+    params.value.pagenum = lastPage
+    getAllArticles()
+  } else {
+    setPageData()
+  }
+}
 // 删除
 const onDeletearticle = async(row) => {
   await ElMessageBox.confirm('是否删除该文章?', '提示', {
@@ -58,20 +88,25 @@ const onDeletearticle = async(row) => {
     ElMessageBox.close()
   })
 }
+
+// 监听排序规则变化
+watch(order_key, () => {
+  getAllArticles()
+})
+
+
+
 </script>
 
 <template>
   <pageContainer class="container">
     <div class="title">
       <p>文章管理</p>
-      <el-button type="primary" class="button">添加文章</el-button>
+      <el-button type="primary" class="button" @click="onAddarticle()">添加文章</el-button>
     </div>
     <el-form inline class="top">
       <el-form-item label="文章分类">
-        <el-select class="select">
-          <el-option label="1" value="1"></el-option>
-          <el-option label="2" value="2"></el-option>
-        </el-select>
+        <channelSelect style="width: 240px"></channelSelect>
       </el-form-item>
       <el-form-item label="文章状态">
         <el-select class="select">
@@ -82,6 +117,13 @@ const onDeletearticle = async(row) => {
       <el-form-item class="right">
         <el-button type="primary">搜索</el-button>
         <el-button>重置</el-button>
+      </el-form-item>
+      <el-form-item label="排序规则">
+        <el-select style="width:110px" v-model="order_key">
+          <el-option label=" 时间逆序" value="1"></el-option>
+          <el-option label="时间顺序" value="2"></el-option>
+          <el-option label="点击次数" value="3"></el-option>
+        </el-select>
       </el-form-item>
     </el-form>
     <el-table class="table" v-loading="loading" :data="articleList" align="center">
@@ -101,7 +143,7 @@ const onDeletearticle = async(row) => {
           {{ formatTime(row.updatedAt) }}
         </template>
       </el-table-column>
-      <el-table-column label="文章状态" prop="status" align="center"></el-table-column>
+      <el-table-column label="文章状态" prop="artstatus" align="center"></el-table-column>
       <el-table-column label="操作" align="center">
         <template #default="{ row }">
           <el-tooltip content="编辑" placement="top">
@@ -118,6 +160,8 @@ const onDeletearticle = async(row) => {
       layout="total, sizes, prev, pager, next, jumper" :page-sizes="[3, 5, 7, 10]"
       style="margin-top: 20px; jusify-content: flex-end;">
     </el-pagination>
+    <!--编辑按钮抽屉 -->
+    <ArticleEdit ref="articleEditRef" @success="onSuccess"></ArticleEdit>
   </pageContainer>
 </template>
 
@@ -139,15 +183,15 @@ const onDeletearticle = async(row) => {
       }
     }
     .top {
-      width: 88%;
-      margin: 2%;
+      width: 100%;
+      margin: 2% 0 2% 2%;
       border-bottom: 1px solid #ccc;
       .select {
         width: 200px;
         margin: 0 2% 0 0; 
       }
       .right {
-        margin-left: 10%;
+        margin: -2% 9% 0 9%;
       }
     }
     .table {

@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 // 注册接口
-
 export const userRegisterService = ({ 
   username,
   password,
@@ -18,8 +17,13 @@ export const userLoginService = ({
   username,
   password 
 }) => {
-  return request.post('users/login', { 
+  return request.post('/users/login', { 
     username,
     password 
   })
+}
+
+// 获取用户信息
+export const getUserInfo = () => {
+  return request.get('/users/getUser1')
 }

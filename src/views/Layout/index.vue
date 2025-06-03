@@ -1,9 +1,8 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { reactive } from 'vue'
 import router from '@/router'
 import { useUserStore } from '@/stores/modules/user'
-
 const userStore = useUserStore()
 import {
   Document,
@@ -78,6 +77,12 @@ const handleCommand = (command) => {
     
   }
 }
+
+onMounted(() => {
+  userStore.getUserMessage()
+  console.log(userStore.message);
+  
+})
 </script>
 
 <template>
@@ -87,7 +92,7 @@ const handleCommand = (command) => {
         Blog
       </div>
       <div class="control">
-        <el-radio-group v-model="isCollapse" @click="isCollapse = !isCollapse" class="collapse">
+        <el-radio-group v-model="isCollapse" class="collapse">
           <el-radio-button :value="false">
             <el-icon>
               <open></open>
@@ -102,7 +107,7 @@ const handleCommand = (command) => {
       </div>
       <div class="top-right">
         <div class="username">
-          <span>爱吃香菜</span>
+          <span>{{ userStore.message?.username ||`未登录`  }}</span>
           <!-- {{ username.length > 8 ? username.slice(0,8) + '...' : username}}-->
         </div>
         <el-dropdown placement="bottom-end" @command="handleCommand" class="avator">
@@ -164,7 +169,7 @@ const handleCommand = (command) => {
 
 <style lang="scss" scoped>
 .el-menu-vertical-demo:not(.el-menu--collapse) {
-  width: 100%;
+  width: 99.3%;
   height: 99%;
   background-color: #F5F5DC;
 }
@@ -238,7 +243,6 @@ const handleCommand = (command) => {
     .left-nav {
       transition: all 0.3s;
       height: 80vh;
-      width: 200px;
       min-width: 200px;
       max-width: 200px;
       &.collapse {
