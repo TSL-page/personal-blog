@@ -22,7 +22,7 @@ import {
 import { ElMessageBox } from 'element-plus'
 
 const isCollapse = ref(true)
-
+const userInfo = ref({})
 // 头像路径
 const state = reactive({
   circleUrl:
@@ -79,10 +79,9 @@ const handleCommand = (command) => {
   }
 }
 
-onMounted(() => {
-  getUserMessage()
-  console.log(userStore.message);
-  
+onMounted(async() => {
+  const res = await getUserMessage()
+  userInfo.value = res.data.data
 })
 </script>
 
@@ -108,11 +107,9 @@ onMounted(() => {
       </div>
       <div class="top-right">
         <div class="username">
-          <span>{{ userStore.message?.username ||`未登录`  }}</span>
-          <!-- {{ username.length > 8 ? username.slice(0,8) + '...' : username}}-->
+          <span>{{ userInfo?.realName ||`未登录`  }}</span>
         </div>
         <el-dropdown placement="bottom-end" @command="handleCommand" class="avator">
-          <!-- 展示给用户，默认看到的 -->
           <span class="el-dropdown__box">
             <el-avatar :src="circleUrl" />
             <el-icon class="el-dropdown__icon">

@@ -25,10 +25,9 @@ export const useUserStore = defineStore('user', () => {
       {
         key: 'token',
         storage: window.localStorage,
-        paths: ['token','message']
+        paths: ['token']
       }
     ]
   }
- 
 })
 

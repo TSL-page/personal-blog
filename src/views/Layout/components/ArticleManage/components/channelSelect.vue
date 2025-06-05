@@ -29,6 +29,6 @@ getChannelList()
 
 <template>
   <el-select v-model="proxyValue" :style="{ width }">
-    <el-option v-for="item in channelList" :key="item.id" :label="item.categoryId" :value="item.categoryName" />
+    <el-option v-for="item in channelList" :key="item.id" :label="item.categoryId" :value="item.categoryId" />
   </el-select>
 </template>

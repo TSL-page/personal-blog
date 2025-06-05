@@ -29,7 +29,7 @@ export const getUserMessage = async () => {
   try {
     return await request.get('/users/getUser1')
   } catch (error) {
-    console.error('获取用户信息失败:', error.response || error.message)  // 输出具体错误信息（如状态码、响应内容）
+    console.error('获取用户信息失败:', error.response || error.message)
     throw error  // 抛出错误以便上层处理
   }
 }

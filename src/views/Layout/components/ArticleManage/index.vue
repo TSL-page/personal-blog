@@ -42,9 +42,8 @@ const setPageData = () => {
   const end = params.value.pagenum * params.value.pagesize
   articleList.value = allArticles.value.slice(start, end)
 }
-// 分页逻辑
+
 const onSizeChange = (size) => {
-  // 每页条数变化了，重新渲染
   params.value.pagenum = 1
   params.value.pagesize = size
   setPageData()
@@ -66,14 +65,12 @@ const onAddarticle = () => {
   articleEditRef.value.open()
 }
 
-// 添加或者编辑的回调
+
 const onSuccess = (type) => {
+  getAllArticles(); 
   if (type === "add") {
-    const lastPage = Math.ceil(allArticles.value.length / params.value.pagesize)
-    params.value.pagenum = lastPage
-    getAllArticles()
-  } else {
-    setPageData()
+    const lastPage = Math.ceil(allArticles.value.length / params.value.pagesize);
+    params.value.pagenum = lastPage;
   }
 }
 // 删除
@@ -95,7 +92,18 @@ watch(order_key, () => {
   getAllArticles()
 })
 
+// 搜索功能
+const selectedStatus = ref('') 
+const selectedCategory = ref('') 
 
+
+//  重置
+const onReset = () => {
+  selectedCategory.value = ''
+  selectedStatus.value = ''
+  params.value.pagenum = 1
+  getAllArticles()
+}
 
 </script>
 
@@ -107,17 +115,19 @@ watch(order_key, () => {
     </div>
     <el-form inline class="top">
       <el-form-item label="文章分类">
-        <channelSelect style="width: 240px"></channelSelect>
+        <channelSelect style="width: 240px" v-model="selectedCategory"></channelSelect>
       </el-form-item>
       <el-form-item label="文章状态">
-        <el-select class="select">
-          <el-option label="xxx" value="xxx" style="width:240px"></el-option>
-          <el-option label="已发布" value="已发布"></el-option>
+        <el-select class="select" v-model="selectedStatus">
+          <el-option label="已发布" value="published"></el-option>
+          <el-option label="草稿" value="draft"></el-option>
+          <el-option label="待审核" value="pending"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item class="right">
-        <el-button type="primary">搜索</el-button>
-        <el-button>重置</el-button>
+        <!-- 添加搜索和重置按钮的点击事件 -->
+        <el-button type="primary" @click="onSearch">搜索</el-button>
+        <el-button @click="onReset">重置</el-button>
       </el-form-item>
       <el-form-item label="排序规则">
         <el-select style="width:110px" v-model="order_key">

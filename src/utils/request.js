@@ -21,7 +21,7 @@ instance.interceptors.request.use(
       }
     }
     if (token) {
-      config.headers.Authorization = 'Bearer ' + token
+      config.headers.satoken = token
     }
     return config
   },

@@ -1,71 +1,77 @@
 <script setup>
 import { ref } from 'vue'
-import axios from 'axios'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { editArticle,addArticle,getArticleDetail } from '@/api/article'
 import { ElMessage } from 'element-plus'
 import channelSelect from  './channelSelect.vue'
 
-// 控制抽屉的显示隐藏
-const visiableDrawer = ref(false)
 
-// 默认表单数据
+const visiableDrawer = ref(false)
+const form = ref(null)
+
 const defaultForm = {
-  title: '',
-  articleId: '', 
-  cover_img: '',
-  content: '',
-  artstatus: '' ,
-  categoryId: ''
+  articleId: 0, 
+  title: "",
+  content: "",
+  status: '',
+  categoryId: 2,
+  isTop: 1,
+  viewCount: 500,
+  userId: 2,
 }
 
 const formModel = ref({ ...defaultForm })
 const editorRef = ref()
-
+const emit = defineEmits(['success'])
 const open = async (row) => {
-  visiableDrawer.value = true
+  visiableDrawer.value = true;
   if (row && row.articleId) {
-    // 编辑操作
-    formModel.articleId = row.articleId
+    const currentArticleId = row.articleId;
     try {
-      const res = await getArticleDetail(row.articleId)
-      if (res.data && res) {
-        formModel.value = { ...defaultForm, ...res.data.data }
-        imgUrl.value = baseURL + formModel.value.cover_img
-        const file = await imageUrlToFileObject(imgUrl.value, formModel.value.cover_img)
-        formModel.value.cover_img = file
+      const res = await getArticleDetail(currentArticleId);
+      if (res.data.data && res) {
+        const { status, comments, artstatus, ...validData } = res.data.data;
+        formModel.value = {
+          ...defaultForm,
+          ...validData,
+          articleId: currentArticleId, 
+        };
       } else {
-        console.error('No data received from editArticle')
+        console.error('No data received from editArticle');
       }
     } catch (error) {
-      console.error('Error fetching article details:', error)
+      console.error('Error fetching article details:', error);
     }
-    
   } else {
-    // 添加操作
-    formModel.value = { ...defaultForm }
-    imgUrl.value = ''
+    formModel.value = { ...defaultForm };
   }
 }
 
-
-// 提交表单
-const emit = defineEmits(['success'])
-const onPublish = async (artstatus) => {
-  formModel.value.artstatus = artstatus
-  if (formModel.value.articleId) {
-    // 编辑操作
-    await editArticle({ ...formModel.value })
-    ElMessage.success('编辑成功')
-    visiableDrawer.value = false
-    emit('success', 'edit')
-  } else {
-    // 添加操作
-    await addArticle({ ...formModel.value })
-    ElMessage.success('添加成功')
-    visiableDrawer.value = false
-    emit('success', 'add')
+const rules = ref({
+  title: [
+    { required: true, message: '请输入文章标题', trigger: 'blur' }
+  ],
+  content: [
+    { required: true, message: '请输入文章内容', trigger: 'blur' }
+  ]
+})
+const onPublish = async (status) => {
+  try {
+    const validateResult = await form.value?.validate()
+    if (!validateResult) return
+    formModel.value.artstatus = status
+    if (formModel.value.articleId) {
+      await editArticle({ ...formModel.value });
+      ElMessage.success('编辑成功');
+    } else {
+      await addArticle({ ...formModel.value });
+      ElMessage.success('添加成功');
+    }
+    visiableDrawer.value = false;
+    emit('success', formModel.value.articleId ? 'edit' : 'add');
+  } catch (error) {
+    ElMessage.error(`操作失败：${error.response?.data?.message || error.message}`);
   }
 }
 defineExpose({
@@ -75,29 +81,20 @@ defineExpose({
 
 <template>
   <el-drawer v-model="visiableDrawer" direction="rtl" size="50%" :title="formModel.articleId ? '编辑文章' : '添加文章'">
-    <el-form>
+    <el-form ref="form" :model="formModel" :rules="rules"> <!-- 此处的 ref="form" 与 script 中的 form 变量绑定 -->
       <el-form-item label="文章标题" prop="title">
         <el-input v-model="formModel.title" placeholder="请输入文章标题"></el-input>
       </el-form-item>
       <el-form-item v-model="formModel.categoryId" label="文章分类" prop="categoryId">
         <channel-select v-model="formModel.categoryId" width="100%"></channel-select>
       </el-form-item>
-      <el-form-item label="文章记录" prop="cover_img">
-        <el-upload class="avatar-uploader" :show-file-list="false" :auto-upload="false" :on-change="onSelectFile">
-          <img v-if="imgUrl" :src="imgUrl" class="avatar" />
-          <el-icon v-else class="avatar-uploader-icon">
-            <Plus />
-          </el-icon>
-        </el-upload>
-      </el-form-item>
-      <el-form-item label="文章内容" prop="content" style="width:600px; height:150px;margin-bottom:71px">
-        <quill-editor ref="editorRef" v-model:content="formModel.content" content-type="html" theme="snow"
-          style="width:600px"></quill-editor>
+      <el-form-item label="文章内容" prop="content" style="width:100%; height:300px;margin-bottom:20px">
+        <quill-editor ref="editorRef" v-model:content="formModel.content" content-type="html" theme="snow" style="width:100%"></quill-editor>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onPublish('已发布')">已发布</el-button>
-        <el-button type="info" @click="onPublish('草稿')">草稿</el-button>
-        <el-button type="info" @click="onPublish('待审核')">待审核</el-button>
+        <el-button type="primary" @click="onPublish('published')">已发布</el-button>
+        <el-button type="info" @click="onPublish('draft')">草稿</el-button>
+        <el-button type="info" @click="onPublish('pending')">待审核</el-button>
       </el-form-item>
     </el-form>
   </el-drawer>
