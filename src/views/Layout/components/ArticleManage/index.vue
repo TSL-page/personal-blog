@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch} from "vue";
-import { getArticleList, deleteArticle } from "@/api/article.js";
+import { getArticleList, deleteArticle, searchArticle } from "@/api/article.js";
 import { formatTime } from "@/utils/format.js"; // 时间格式化
 import { ElMessageBox } from 'element-plus'
 import ArticleEdit from "./components/articleEdit.vue";
@@ -11,19 +11,18 @@ import {
   Delete 
 } from "@element-plus/icons-vue";
 // 分页
-const loading = ref(false) // loading状态
-const allArticles = ref([])   // 所有文章
-const articleList = ref([])   // 当前页显示的文章
-const total = ref(0) // 文章总条数
+const loading = ref(false)
+const allArticles = ref([])
+const articleList = ref([])
+const total = ref(0)
 
 const articleEditRef = ref(null);
 // 定义请求参数对象
 const params = ref({
-  pagenum: 1, // 当前页
-  pagesize: 5, // 当前生效的每页条数
+  pagenum: 1,
+  pagesize: 5,
 })
 
-// 排序规则
 const order_key = ref('1')
 // 获取所有文章列表
 const getAllArticles = async() => {
@@ -35,12 +34,6 @@ const getAllArticles = async() => {
   total.value = allArticles.value.length
   setPageData()
   loading.value = false
-}
-// 每一页
-const setPageData = () => {
-  const start = (params.value.pagenum - 1) * params.value.pagesize
-  const end = params.value.pagenum * params.value.pagesize
-  articleList.value = allArticles.value.slice(start, end)
 }
 
 const onSizeChange = (size) => {
@@ -86,16 +79,33 @@ const onDeletearticle = async(row) => {
     ElMessageBox.close()
   })
 }
-
 // 监听排序规则变化
 watch(order_key, () => {
   getAllArticles()
 })
-
 // 搜索功能
 const selectedStatus = ref('') 
 const selectedCategory = ref('') 
+const onSearch = () => {
+  params.value.pagenum = 1;  // 搜索时重置为第一页
+  
+  const filteredArticles = allArticles.value.filter(article => {
+    const statusMatch = !selectedStatus.value || article.artstatus === selectedStatus.value;
+    const categoryMatch = !selectedCategory.value || article.categoryId === selectedCategory.value;
+    return statusMatch && categoryMatch; 
+  });
 
+  // 更新总条数和当前页数据
+  total.value = filteredArticles.length;
+  setPageData(filteredArticles);  // 使用过滤后的数据计算分页
+}
+
+// 修改分页数据计算方法，支持传入过滤后的数据
+const setPageData = (data = allArticles.value) => {  
+  const start = (params.value.pagenum - 1) * params.value.pagesize;
+  const end = params.value.pagenum * params.value.pagesize;
+  articleList.value = data.slice(start, end);
+}
 
 //  重置
 const onReset = () => {

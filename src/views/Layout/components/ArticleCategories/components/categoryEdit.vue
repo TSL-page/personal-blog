@@ -49,8 +49,7 @@ defineExpose({
       <el-form-item label="分类名称" prop="categoryName">
         <el-input v-model="formModel.categoryName" placeholder="请输入分类名称"></el-input>
       </el-form-item>
-      <!-- 添加 v-if 控制分类ID输入框仅编辑时显示 -->
-      <el-form-item v-if="formModel.categoryId" label="分类Id" prop="categoryId">
+      <el-form-item label="分类Id" prop="categoryId">
         <el-input v-model="formModel.categoryId" placeholder="请输入分类Id"></el-input>
       </el-form-item>
       <el-form-item label="描述" prop="description">

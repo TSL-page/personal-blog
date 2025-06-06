@@ -66,17 +66,23 @@ const register = async () => {
 }
 
   // 登录
-  const login = async () => {
-    try {
-      await form.value.validate()
-      const res = await userLoginService(formModel.value)
-      userStore.setToken(res.data.data.token)
-      ElMessage.success('登录成功')
+const login = async () => {
+  try {
+    await form.value.validate()
+    const res = await userLoginService(formModel.value)
+    userStore.setToken(res.data.data.token)
+    ElMessage.success('登录成功')
+
+    // 根据用户角色跳转不同页面
+    if (res.data.data.role !== 'user') {
       router.push('/layout')
-    } catch (err) {
-      ElMessage.error('登录失败，请检查用户名或密码')
+    } else {
+      router.push('/Frontlayout')
     }
+  } catch (err) {
+    ElMessage.error('登录失败，请检查用户名或密码')
   }
+}
 </script>
 
 <template>

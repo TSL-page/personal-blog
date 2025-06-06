@@ -35,3 +35,10 @@ export const addArticle = (data) => {
 export const getArticleCategory = () => {
   return request.get('/categories/findAll')
 }
+
+// 搜索文章
+export const searchArticle = (params) => {
+  return request.post('articles/selectArticleBystatusAndId',{
+    params
+  })
+}

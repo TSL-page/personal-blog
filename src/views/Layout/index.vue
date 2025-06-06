@@ -40,8 +40,7 @@ const menuList = [
    },
   { index: '2', icon: Location, title: '文章管理', route: '/articlemanage' },
   { index: '3', icon: Setting, title: '文章类别管理', route: '/articlecategories' },
-  { index: '4', icon: Document, title: '文章审核', route: '/articlemoderation' },
-  { index: '5', icon: Setting, title: '评论管理', route: '/articlemanage' },
+  { index: '5', icon: Setting, title: '评论管理', route: '/commentmanage' },
   { index: '6', icon: PieChart, title: '数据统计', route: '/datastatistics' }
 ]
 
