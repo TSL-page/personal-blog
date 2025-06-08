@@ -47,9 +47,7 @@ const menuList = [
 
 // 跳转方法
 const handleMenuClick = (item) => {
-  if (item.route) {
-    console.log("xxxx");
-    
+  if (item.route) { 
     router.push(item.route)
   }
 }
@@ -73,8 +71,6 @@ const handleCommand = (command) => {
     }).catch(() => {
       console.log('取消退出登录')
     })
-    
-    
   }
 }
 

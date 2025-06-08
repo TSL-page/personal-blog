@@ -30,6 +30,23 @@ export const getUserMessage = async () => {
     return await request.get('/users/getUser1')
   } catch (error) {
     console.error('获取用户信息失败:', error.response || error.message)
-    throw error  // 抛出错误以便上层处理
+    throw error
   }
+}
+
+// 修改用户信息
+export const updateUserMessage =  ({
+username,
+password,
+email,
+avatar,
+real_name
+}) => {
+    return request.post('/users/update', { 
+      username,
+      password,
+      email,
+      avatar,
+      real_name
+})
 }

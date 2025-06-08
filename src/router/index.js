@@ -9,6 +9,10 @@ import Avatar from '@/components/user/Avatar/index.vue'
 import Password from '@/components/user/Password/index.vue'
 import Profile from '@/components/user/Profile/index.vue'
 import FrontLayout from '@/views/FrontLayout/index.vue'
+
+import MyArticle from '@/views/FrontLayout/components/myArticle.vue'
+import articleDetail from '@/views/FrontLayout/components/articleDetail.vue'
+import editMessage from '@/views/FrontLayout/components/editMessage.vue'
 import { useUserStore } from '@/stores'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,11 +30,16 @@ const router = createRouter({
         { path: '/password', component: Password } // 修改密码
       ]
     },
-    { path: '/frontLayout',component: FrontLayout }    
+    { path: '/frontLayout', component: FrontLayout,
+      children: [
+        { path: '/myArticle', component: MyArticle},
+        { path: '/frontLayout/articleDetail', component: articleDetail},
+        { path: '/myArticle', redirect: '/myArticle' },
+        { path: '/editMessage', component: editMessage}
+      ]
+     }, 
   ]
 })
-
-// 登录访问拦截 => 默认是直接放行的
 
 router.beforeEach ( (to) => {
   // 如果没有token, 且访问的是非登录页，拦截到登录，其他情况正常放行

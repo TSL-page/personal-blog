@@ -1,4 +1,11 @@
 <script setup>
+import banner1 from '@/assets/frontlayout/banner1.png'
+import banner2 from '@/assets/frontlayout/banner2.png'
+import banner3 from '@/assets/frontlayout/banner3.png'
+import banner4 from '@/assets/frontlayout/banner4.png'
+import banner5 from '@/assets/frontlayout/banner5.png'
+import banner6 from '@/assets/frontlayout/banner6.png'
+const localImages = [banner1, banner2, banner3, banner4, banner5, banner6]
 </script>
 
 <template>
@@ -6,13 +13,13 @@
     <el-carousel 
       height="400px" 
       autoplay 
-      interval="3000"
-      indicator-position="outside"
+      interval="2000"
+      indicator-position="inside"
       arrow="always"
     >
-      <el-carousel-item v-for="(item, index) in 3" :key="index">
+      <el-carousel-item v-for="(item, index) in 6" :key="index">
         <img 
-          :src="`https://picsum.photos/1920/400?random=${index}`" 
+          :src="localImages[index]" 
           alt="轮播图" 
           class="carousel-img"
         >
@@ -23,14 +30,14 @@
 
 <style lang="scss" scoped>
 .banner-container {
-  width: 100%;
-  max-width: 1920px;
-  margin: 0 auto;
+  width: 80%;
+  height: 440px;
+
 }
 
 .carousel-img {
   width: 100%;
-  height: 100%;
-  object-fit: cover; // 确保图片填满容器
+  height: 90%;
+  object-fit: cover;
 }
 </style>
