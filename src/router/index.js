@@ -7,10 +7,10 @@ import CommentManage from '@/views/Layout/components/CommentManage/index.vue'
 import DataStatistics from '@/views/Layout/components/DataStatistics/index.vue'
 import Profile from '@/components/user/Profile/index.vue'
 import FrontLayout from '@/views/FrontLayout/index.vue'
-
 import MyArticle from '@/views/FrontLayout/components/myArticle.vue'
 import articleDetail from '@/views/FrontLayout/components/articleDetail.vue'
 import editMessage from '@/views/FrontLayout/components/editMessage.vue'
+import hot from '@/views/FrontLayout/components/hot.vue'
 import { useUserStore } from '@/stores'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,7 +31,8 @@ const router = createRouter({
         { path: '/myArticle', component: MyArticle},
         { path: '/frontLayout/articleDetail', component: articleDetail},
         { path: '/myArticle', redirect: '/myArticle' },
-        { path: '/editMessage', component: editMessage}
+        { path: '/editMessage', component: editMessage},
+        { path: '/hot', component: hot},
       ]
      }, 
   ]

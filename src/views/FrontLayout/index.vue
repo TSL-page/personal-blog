@@ -13,7 +13,6 @@ const handleMyArticleClick = () => {
   router.push('/myArticle')
 }
 
-// 时间格式化函数（转换为 YYYY-MM-DD HH:mm:ss 格式）
 const formatTime = (timeStr) => {
   if (!timeStr) return '未设置'
   const date = new Date(timeStr)
@@ -66,19 +65,25 @@ const logout = () => {
 
     <div class="nav">
       <ElMenu mode="vertical" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-        <ElMenuItem index="1" @click="handleMyArticleClick">
+        <ElMenuItem index="1" @click="router.push('/hot')">
+          <template #title>
+            <i class="el-icon-document"></i>
+            <span>精选文章</span>
+          </template>
+        </ElMenuItem>
+        <ElMenuItem index="2" @click="handleMyArticleClick">
           <template #title>
             <i class="el-icon-document"></i>
             <span>我的文章</span>
           </template>
         </ElMenuItem>
-        <ElMenuItem index="2" @click="router.push('/editMessage')">
+        <ElMenuItem index="3" @click="router.push('/editMessage')">
           <template #title>
             <i class="el-icon-document"></i>
             <span>编辑信息</span>
           </template>
         </ElMenuItem>
-        <ElMenuItem index="3" @click="logout()">
+        <ElMenuItem index="4" @click="logout()">
           <template #title>
             <i class="el-icon-document"></i>
             <span>退出登录</span>
@@ -103,7 +108,7 @@ const logout = () => {
     padding: 10px 0 10px 10px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    position: relative; /* 关键：为伪元素定位 */
+    position: relative;
     overflow: hidden; 
 
     .avatar {
@@ -125,27 +130,26 @@ const logout = () => {
     &::before {
       content: "";
       position: absolute;
-      top: -2px; /* 覆盖原边框 */
+      top: -2px;
       left: -2px;
       right: -2px;
       bottom: -2px;
       background: linear-gradient(45deg, #2196F3, #4CAF50, red, #4B0082);
-      background-size: 300% 300%; /* 放大背景用于动画 */
-      z-index: -1; /* 置于内容下方 */
-      animation: borderFlow 2s linear infinite; /* 使用已有的动画 */
+      background-size: 300% 300%;
+      z-index: -1;
+      animation: borderFlow 2s linear infinite;
     }
 
-    /* 添加内容背景层，防止文字被渐变覆盖 */
     &::after {
       content: "";
       position: absolute;
-      top: 1px; /* 内缩1px避免遮挡流动边框 */
+      top: 1px;
       left: 1px;
       right: 1px;
       bottom: 1px;
-      background: #fff; /* 白色背景 */
-      border-radius: 7px; /* 比原边框半径小1px，匹配圆角 */
-      z-index: -1; /* 置于渐变层上方，内容下方 */
+      background: #fff;
+      border-radius: 7px;
+      z-index: -1;
     }
   }
 
@@ -167,7 +171,6 @@ const logout = () => {
     }
   }
 
-  /* 复用已有的流动动画（如果之前未定义需添加） */
   @keyframes borderFlow {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }

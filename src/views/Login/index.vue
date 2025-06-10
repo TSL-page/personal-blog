@@ -72,8 +72,6 @@ const login = async () => {
     const res = await userLoginService(formModel.value)
     userStore.setToken(res.data.data.token)
     ElMessage.success('登录成功')
-
-    // 根据用户角色跳转不同页面
     if (res.data.data.role !== 'user') {
       router.push('/layout')
     } else {

@@ -34,8 +34,8 @@ const handleSubmit = async() => {
     const res = await updateUserMessage(submitData)
     console.log('提交响应:', res)
 
-    if (res.data?.code === '200') {  // 使用可选链避免 res.data 为 undefined
-      userInfo.value = { ...userInfo.value, ...res.data.data }  // 合并更新数据（保留未修改字段）
+    if (res.data?.code === '200') {
+      userInfo.value = { ...userInfo.value, ...res.data.data }
       ElMessage.success('信息更新成功')
     } else {
       ElMessage.error(res.data?.message || '更新失败，请重试')
@@ -101,17 +101,17 @@ onMounted(async () => {
 <style scoped lang="scss">
 .info2 {
   width: 50%;
-  height: 330px;
+  height: 400px;
   border: 1px solid #e5e7eb;
   margin:40px 0 0 300px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  padding: 15px;  /* 增加内边距使输入框与容器有间距 */
+  padding: 15px;
   background-image: url('../../../assets/frontlayout/myArticle.png');
     background-size: cover;
   .avatar {
-    margin-bottom: 20px;  /* 调整头像底部间距 */
+    margin-bottom: 20px;
     img {
       width: 80px;
       height: 80px;
@@ -127,21 +127,21 @@ onMounted(async () => {
   }
 
   .label {
-    width: 80px;  // 提示词固定宽度，保证对齐
+    width: 80px;
     color: #2563eb;
     font-size: 16px;
   }
 
   .input-item {
-    flex: 1;  // 输入框占满剩余空间
+    flex: 1;
     --el-input-border-radius: 4px;
     --el-input-font-size: 16px;
     --el-input-text-color: #2563eb;
   }
 }
 .submit-btn {
-  width: 50%;  // 按钮宽度占满容器
-  margin: 20px 200px;  // 按钮与输入框之间的间距
+  width: 50%;
+  margin: 20px 200px;
 }
 </style>
 

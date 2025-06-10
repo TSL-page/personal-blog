@@ -60,6 +60,7 @@ const handleCommand = (command) => {
 onMounted(async() => {
   const res = await getUserMessage()
   userInfo.value = res.data.data
+  console.log(userInfo.value)
 })
 </script>
 
@@ -89,7 +90,7 @@ onMounted(async() => {
         </div>
         <el-dropdown placement="bottom-end" @command="handleCommand" class="avator">
           <span class="el-dropdown__box">
-            <el-avatar :src="circleUrl" />
+            <el-avatar :src="userInfo?.avatar" />
             <el-icon class="el-dropdown__icon">
               <CaretBottom />
             </el-icon>
@@ -232,7 +233,7 @@ onMounted(async() => {
       padding: 0;
       .content {
         width: 96%;
-        height: 520px;
+        height: 100%;
         margin: 2% 2% 0 2%;
         border-radius: 5px;
         background-color: #F5F5F5;

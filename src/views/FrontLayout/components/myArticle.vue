@@ -122,7 +122,7 @@ onUnmounted(() => {
         userId: 1,
         isTop: 0,
         categoryId: 2,
-        artstatus: 'draft'
+        artstatus: 'pending'
       };
     }">发布文章</el-button>
   </div>
@@ -153,18 +153,26 @@ onUnmounted(() => {
         <el-button type="primary"
           @click="router.push({ path: '/frontLayout/articleDetail', query: { id: item.articleId } })">查看详情</el-button>
       </div>
-      <h3>{{ item.title }}</h3>
-      <div class="article-content">
-        <p v-html="item.content"></p>
+      <div class="control" v-if="item.artstatus === 'published'">
+        <h3>{{ item.title }}</h3>
+        <div class="article-content">
+          <p v-html="item.content"></p>
+        </div>
+        <div class="article-meta">
+          <span>发布时间：{{ dayjs(item.createdAt).format('YYYY-MM-DD HH:mm:ss') }}</span>
+          <span>更新时间：{{ dayjs(item.updatedAt).format('YYYY-MM-DD HH:mm:ss') }}</span>
+          <span>阅读量：{{ item.viewCount }}次</span>
+        </div>
       </div>
-      <div class="article-meta">
-        <span>发布时间：{{ dayjs(item.createdAt).format('YYYY-MM-DD HH:mm:ss') }}</span>
-        <span>更新时间：{{ dayjs(item.updatedAt).format('YYYY-MM-DD HH:mm:ss') }}</span>
-        <span>阅读量：{{ item.viewCount }}次</span>
+      <div class="control" v-if="item.artstatus === 'draft'" style="margin-top: 60px; color: red;">
+        抱歉，您发布文章的审核未通过,请检查文章是否符合发布要求......
+      </div>
+      <div class="control" v-if="item.artstatus === 'pending'" style="margin-top: 60px; color: blue;">
+        您发布的文章正在审核中......请耐心等待审核结果
       </div>
     </div>
-    <div v-if="!userArticleList.length" class="empty-tip">暂无文章数据</div>
-  </div>
+    <div v-if=" !userArticleList.length" class="empty-tip">暂无文章数据</div>
+    </div>
 </template>
 
 <style lang="scss" scoped>
@@ -177,7 +185,7 @@ onUnmounted(() => {
     line-height: 50px;
     font-size: 20px;
     font-weight: bold;
-    background-image: linear-gradient(90deg, #2196F3, #4CAF50, #ff0000, #4B0082); // 与容器边框相同的渐变颜色
+    background-image: linear-gradient(90deg, #2196F3, #4CAF50, #ff0000, #4B0082); 
     background-size: 400% 400%;
     -webkit-background-clip: text; 
     background-clip: text;
@@ -186,7 +194,6 @@ onUnmounted(() => {
   }
 }
 
-// 新增文字流动动画（与容器边框动画保持节奏一致）
 @keyframes textFlow {
   0% {
     background-position: 0% 50%;
@@ -255,7 +262,6 @@ onUnmounted(() => {
   }
 }
 
-/* 容器添加半透明背景，避免内容与动画重叠 */
 .article-container::after {
   content: "";
   position: absolute;

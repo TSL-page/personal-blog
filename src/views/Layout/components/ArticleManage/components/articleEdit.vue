@@ -81,7 +81,7 @@ defineExpose({
 
 <template>
   <el-drawer v-model="visiableDrawer" direction="rtl" size="50%" :title="formModel.articleId ? '编辑文章' : '添加文章'">
-    <el-form ref="form" :model="formModel" :rules="rules"> <!-- 此处的 ref="form" 与 script 中的 form 变量绑定 -->
+    <el-form ref="form" :model="formModel" :rules="rules">
       <el-form-item label="文章标题" prop="title">
         <el-input v-model="formModel.title" placeholder="请输入文章标题"></el-input>
       </el-form-item>
@@ -92,9 +92,9 @@ defineExpose({
         <quill-editor ref="editorRef" v-model:content="formModel.content" content-type="html" theme="snow" style="width:100%"></quill-editor>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onPublish('published')">已发布</el-button>
-        <el-button type="info" @click="onPublish('draft')">草稿</el-button>
-        <el-button type="info" @click="onPublish('pending')">待审核</el-button>
+        <el-button type="primary" @click="onPublish('published')">通过</el-button>
+        <el-button type="info" @click="onPublish('draft')">拒绝</el-button>
+        <el-button type="info" @click="onPublish('pending')">搁置</el-button>
       </el-form-item>
     </el-form>
   </el-drawer>

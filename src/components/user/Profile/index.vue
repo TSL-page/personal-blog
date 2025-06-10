@@ -2,15 +2,13 @@
 import { ref, onMounted } from 'vue'
 import { getUserMessage, updateUserMessage } from '@/api/user'
 import { ElForm, ElFormItem, ElInput } from 'element-plus' 
-import { ElMessage, ElMessageBox } from 'element-plus'  // 新增ElMessageBox引入
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 const formModel = ref({})
-
 const UserMessageList = async () => {
   const res = await getUserMessage()
   formModel.value = res.data.data || {}
 }
-
 const handleSubmit = async () => {
   try {
     if (!formModel.value) {
@@ -89,7 +87,6 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-/* 可选：添加表单样式 */
 .stable {
   padding: 20px;
   max-width: 600px;

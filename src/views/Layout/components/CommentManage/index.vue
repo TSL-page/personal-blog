@@ -4,9 +4,9 @@ import { getCommentByUserId, getCommentByArticleId, deleteComment, commentReview
 import { formatTime } from '@/utils/format.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-// 搜索参数（仅保留目标用户ID和分页相关）
+
 const searchParams = ref({
-  targetUserId: '',     // 目标用户ID（可输入）
+  targetUserId: '',
   pagenum: 1,
   pagesize: 5,
   order_key: 1
@@ -14,10 +14,10 @@ const searchParams = ref({
 const commentList = ref([])
 const total = ref(0)
 const loading = ref(false)
-// 新增：控制审核弹框显示和当前审核的评论数据
-const showAuditDialog = ref(false)  // 弹框可见性
-const currentAuditComment = ref(null)  // 存储当前审核的评论信息
-// 获取评论数据（兼容用户ID/文章ID查询）
+
+const showAuditDialog = ref(false)
+const currentAuditComment = ref(null)
+// 获取评论数据
 const fetchComments = async () => {
   const { targetUserId, articleId } = searchParams.value
   if (!targetUserId && !articleId) {
@@ -28,7 +28,6 @@ const fetchComments = async () => {
   loading.value = true
   try {
     let res
-    // 优先按文章ID查询（若有输入）
     if (articleId) {
       res = await getCommentByArticleId(
         articleId, 
@@ -95,22 +94,21 @@ const onCurrentChange = (page) => {
 onMounted(() => {  })
 
 
-// 打开审核弹框并赋值当前评论数据
+
 const handleAudit = (row) => {
   console.log('审核按钮被点击，当前行数据：', row)
-  currentAuditComment.value = { ...row }  // 深拷贝避免直接修改原数据
+  currentAuditComment.value = { ...row }
   showAuditDialog.value = true
 }
 
-// 保存审核状态（示例，需根据实际接口调整）
-const handleAuditSave = async () => {
-  if (!currentAuditComment.value?.commentId) return  // 确保有评论ID
+
+const handleAuditSave = async() => {
+  if (!currentAuditComment.value?.commentId) return
   try {
     await commentReview(currentAuditComment.value.commentId, currentAuditComment.value.comstatus)
-
     ElMessage.success('审核状态更新成功')
     showAuditDialog.value = false
-    fetchComments()  // 刷新评论列表
+    fetchComments()
   } catch (err) {
     ElMessage.error('审核状态更新失败')
   }
@@ -123,7 +121,6 @@ const handleAuditSave = async () => {
       <h4>评论管理</h4>
     </div>
 
-    <!-- 可交互的搜索表单 -->
     <el-form inline class="search-form">
       <el-form-item label="文章ID">
         <el-input v-model="searchParams.articleId" placeholder="请输入需要查询的文章ID"></el-input>
@@ -153,7 +150,7 @@ const handleAuditSave = async () => {
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center">
-        <template #default="{ row }"> <!-- 添加作用域插槽获取当前行数据 -->
+        <template #default="{ row }">
           <el-button type="primary" @click="handleAudit(row)">审核</el-button>
           <el-button type="danger" @click="handleDelete(row)">删除</el-button>
         </template>
@@ -166,11 +163,10 @@ const handleAuditSave = async () => {
       v-model:page-size="searchParams.pagesize" :total="total" @size-change="onSizeChange"
       @current-change="onCurrentChange" layout="total, sizes, prev, pager, next, jumper" :page-sizes="[5, 10, 15]"
       style="margin-top: 20px;"></el-pagination>
-    <!-- 新增：审核评论弹框 -->
     <el-dialog v-model="showAuditDialog" title="评论审核" width="50%">
       <el-form :model="currentAuditComment" label-width="80px">
         <el-form-item label="评论内容">
-          <el-input v-model="currentAuditComment.content" disabled /> <!-- 回显内容（禁用编辑） -->
+          <el-input v-model="currentAuditComment.content" disabled />
         </el-form-item>
         <el-form-item label="评论状态">
           <el-select v-model="currentAuditComment.comstatus" placeholder="请选择审核状态">
