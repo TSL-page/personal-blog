@@ -1,12 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { reactive } from 'vue'
 import router from '@/router'
 import { useUserStore } from '@/stores/modules/user'
 import { getUserMessage } from '@/api/user'
 const userStore = useUserStore()
 import {
-  Document,
   Location,
   Setting,
   Menu as IconMenu,
@@ -23,23 +21,12 @@ import { ElMessageBox } from 'element-plus'
 
 const isCollapse = ref(true)
 const userInfo = ref({})
-// 头像路径
-const state = reactive({
-  circleUrl:
-    'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-    })
 
     // menu菜单
 const menuList = [
-  { index: '1', icon: IconMenu, title: '个人资料',
-    children: [
-      { index: '1-1', icon: User, title: '基本资料', route: '/profile' },
-      { index: '1-2', icon: Crop, title: '更换头像', route: '/avatar' },
-      { index: '1-3', icon: EditPen, title: '重置密码', route: '/password' },
-    ]
-   },
-  { index: '2', icon: Location, title: '文章管理', route: '/articlemanage' },
-  { index: '3', icon: Setting, title: '文章类别管理', route: '/articlecategories' },
+  { index: '2', icon: User, title: '基本资料', route: '/profile' },
+  { index: '3', icon: Location, title: '文章管理', route: '/articlemanage' },
+  { index: '4', icon: Setting, title: '文章类别管理', route: '/articlecategories' },
   { index: '5', icon: Setting, title: '评论管理', route: '/commentmanage' },
   { index: '6', icon: PieChart, title: '数据统计', route: '/datastatistics' }
 ]
@@ -56,11 +43,7 @@ const handleMenuClick = (item) => {
 const handleCommand = (command) => {
   if (command === 'profile') {
     router.push('/profile')
-  } else if (command === 'avatar') {
-    router.push('/avatar')
-  } else if (command === 'password') {
-    router.push('/password')
-  } else if (command === 'logout') {
+  }  else if (command === 'logout') {
     ElMessageBox.confirm('确定要退出登录吗？', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
@@ -115,8 +98,6 @@ onMounted(async() => {
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="profile" :icon="User">基本资料</el-dropdown-item>
-              <el-dropdown-item command="avatar" :icon="Crop">更换头像</el-dropdown-item>
-              <el-dropdown-item command="password" :icon="EditPen">重置密码</el-dropdown-item>
               <el-dropdown-item command="logout" :icon="SwitchButton">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>

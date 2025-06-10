@@ -14,7 +14,6 @@ export const addArticle = (data) => {
 export const deleteArticle = (id) => {
   return request.delete('articles/delete', 
     {params:{ id } }
-    
   )
 }
 

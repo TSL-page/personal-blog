@@ -14,6 +14,8 @@ const userInfo = ref({
   avatar: '' 
 })
 
+
+
 const handleSubmit = async() => {
   try {
     if (!userInfo.value) {
@@ -106,7 +108,8 @@ onMounted(async () => {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   padding: 15px;  /* 增加内边距使输入框与容器有间距 */
-
+  background-image: url('../../../assets/frontlayout/myArticle.png');
+    background-size: cover;
   .avatar {
     margin-bottom: 20px;  /* 调整头像底部间距 */
     img {
@@ -138,7 +141,7 @@ onMounted(async () => {
 }
 .submit-btn {
   width: 50%;  // 按钮宽度占满容器
-  margin: 20px 40px;  // 按钮与输入框之间的间距
+  margin: 20px 200px;  // 按钮与输入框之间的间距
 }
 </style>
 

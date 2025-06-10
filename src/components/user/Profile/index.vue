@@ -1,18 +1,53 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue'
-import { getUserMessage } from '@/api/user'
-import { ElForm, ElFormItem, ElInput } from 'element-plus' // 按需引入表单组件
+import { ref, onMounted } from 'vue'
+import { getUserMessage, updateUserMessage } from '@/api/user'
+import { ElForm, ElFormItem, ElInput } from 'element-plus' 
+import { ElMessage, ElMessageBox } from 'element-plus'  // 新增ElMessageBox引入
 
-// 表单数据模型
 const formModel = ref({})
 
-// 用户数据获取
 const UserMessageList = async () => {
   const res = await getUserMessage()
-  // 假设返回单条用户数据（根据实际接口返回结构调整）
   formModel.value = res.data.data || {}
-  console.log('用户数据:', formModel.value)
 }
+
+const handleSubmit = async () => {
+  try {
+    if (!formModel.value) {
+      ElMessage.error('用户信息未加载，请刷新页面')
+      return
+    }
+    await ElMessageBox.confirm(
+      '确认更新信息吗？',
+      '提示',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }
+    )
+    const submitData = {
+      username: formModel.value.username,
+      password: formModel.value.password,
+      email: formModel.value.email,
+      avatar: formModel.value.avatar,
+      real_name: formModel.value.realName
+    }
+    const res = await updateUserMessage(submitData)
+    if (res.data?.code === '200') {
+      formModel.value = { ...formModel.value, ...res.data.data }
+      ElMessage.success('信息更新成功')
+    } else {
+      ElMessage.error(res.data?.message || '更新失败，请重试')
+    }
+  } catch (err) {
+    if (err === 'cancel' || err === 'abort') {
+      ElMessage.info('已取消更新')
+    } else {
+      ElMessage.error('网络请求失败，请检查网络连接')
+    }
+  }
+} 
 
 onMounted(() => {
   UserMessageList()
@@ -23,7 +58,7 @@ onMounted(() => {
   <div class="stable">
     <el-form label-width="120px">
       <el-form-item label="用户名">
-        <el-input v-model="formModel.username" disabled></el-input>
+        <el-input v-model="formModel.username"></el-input>
       </el-form-item>
       <el-form-item label="真实姓名">
         <el-input v-model="formModel.realName"></el-input>
@@ -45,6 +80,9 @@ onMounted(() => {
       </el-form-item>
       <el-form-item label="用户状态">
         <el-input v-model="formModel.status" disabled></el-input>
+      </el-form-item>
+      <el-form-item>
+       <el-button type="primary" @click="handleSubmit">修改信息</el-button>
       </el-form-item>
     </el-form>
   </div>
