@@ -147,7 +147,7 @@ onUnmounted(() => {
       </template>
     </el-dialog>
     <div class="article-container" v-for="item in userArticleList" :key="item.articleId">
-      <div class="button" style="margin-left: 220px;">
+      <div class="button" style="margin-left: 48%;">
         <el-button @click="handleEditArticle(item.articleId)" type="primary">编辑</el-button>
         <el-button @click="handleDeleteArticle(item.articleId)" type="danger">删除</el-button>
         <el-button type="primary"
@@ -216,24 +216,24 @@ onUnmounted(() => {
   
   .add {
     position: absolute;
-    top: 20px;
-    right: 0px;
+    top: 50%;
+    right: 50px;
     z-index: 999;
   }
 }
 
 .article-container {
   padding: 10px 5px;
-  width: 460px;
+  width: 37%;
   border-radius: 5px;
-  margin: 15px 60px;
+  margin: 1% 3% 2% 6%;
   position: relative;
   overflow: hidden;
   z-index: 999;
 
   h3 {
    font-size: 20px;
-  color: #2196F3;
+   color: #2196F3;
   }
 }
 

@@ -99,15 +99,14 @@ const logout = () => {
 <style lang="scss" scoped>
   .info {
     width: 17%;
-    height: 330px;
+    height: 50vh;
     border: 1px solid #e5e7eb;
     position: absolute;
-    top: -440px;
     left: 82%;
+    top: 1%;
     padding: 10px 0 10px 10px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    position: relative;
     overflow: hidden; 
 
     .avatar {
@@ -156,8 +155,8 @@ const logout = () => {
     display: flex;
     .nav {
         display: flex;
-        height: 300px;
-        margin-top: -27%;
+        height: 50%;
+        margin-top: 2.8%;
         .el-menu {
           border-right: 0;
         }

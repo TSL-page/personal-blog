@@ -31,7 +31,7 @@ const localImages = [banner1, banner2, banner3, banner4, banner5, banner6]
 <style lang="scss" scoped>
 .banner-container {
   width: 80%;
-  height: 440px;
+  height: 45%;
 
 }
 
