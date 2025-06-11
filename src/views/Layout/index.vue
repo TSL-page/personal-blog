@@ -24,11 +24,11 @@ const userInfo = ref({})
 
     // menu菜单
 const menuList = [
-  { index: '2', icon: User, title: '基本资料', route: '/profile' },
-  { index: '3', icon: Location, title: '文章管理', route: '/articlemanage' },
-  { index: '4', icon: Setting, title: '文章类别管理', route: '/articlecategories' },
-  { index: '5', icon: Setting, title: '评论管理', route: '/commentmanage' },
-  { index: '6', icon: PieChart, title: '数据统计', route: '/datastatistics' }
+  { index: '1', icon: User, title: '基本资料', route: '/profile' },
+  { index: '2', icon: Location, title: '文章管理', route: '/articlemanage' },
+  { index: '3', icon: Setting, title: '文章类别管理', route: '/articlecategories' },
+  { index: '4', icon: Crop, title: '评论管理', route: '/commentmanage' },
+  { index: '5', icon: PieChart, title: '数据统计', route: '/datastatistics' }
 ]
 
 

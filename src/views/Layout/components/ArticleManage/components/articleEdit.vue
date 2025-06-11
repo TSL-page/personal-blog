@@ -91,7 +91,7 @@ defineExpose({
       <el-form-item label="文章内容" prop="content" style="width:100%; height:300px;margin-bottom:20px">
         <quill-editor ref="editorRef" v-model:content="formModel.content" content-type="html" theme="snow" style="width:100%"></quill-editor>
       </el-form-item>
-      <el-form-item>
+      <el-form-item class="bottom">
         <el-button type="primary" @click="onPublish('published')">通过</el-button>
         <el-button type="info" @click="onPublish('reject')">拒绝</el-button>
         <el-button type="info" @click="onPublish('pending')">搁置</el-button>
@@ -138,6 +138,10 @@ defineExpose({
   :deep(.ql-editor) {
     min-height: 200px;
   }
+}
+
+.bottom {
+  margin: 100px 0 0 250px;
 }
 
 
