@@ -93,7 +93,7 @@ defineExpose({
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onPublish('published')">通过</el-button>
-        <el-button type="info" @click="onPublish('draft')">拒绝</el-button>
+        <el-button type="info" @click="onPublish('reject')">拒绝</el-button>
         <el-button type="info" @click="onPublish('pending')">搁置</el-button>
       </el-form-item>
     </el-form>

@@ -129,8 +129,8 @@ const onReset = () => {
       </el-form-item>
       <el-form-item label="文章状态">
         <el-select class="select" v-model="selectedStatus">
-          <el-option label="已发布" value="published"></el-option>
-          <el-option label="草稿" value="draft"></el-option>
+          <el-option label="已通过" value="published"></el-option>
+          <el-option label="未通过" value="reject"></el-option>
           <el-option label="待审核" value="pending"></el-option>
         </el-select>
       </el-form-item>

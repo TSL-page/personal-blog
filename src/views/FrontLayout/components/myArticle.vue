@@ -164,7 +164,7 @@ onUnmounted(() => {
           <span>阅读量：{{ item.viewCount }}次</span>
         </div>
       </div>
-      <div class="control" v-if="item.artstatus === 'draft'" style="margin-top: 60px; color: red;">
+      <div class="control" v-if="item.artstatus === 'reject'" style="margin-top: 60px; color: red;">
         抱歉，您发布文章的审核未通过,请检查文章是否符合发布要求......
       </div>
       <div class="control" v-if="item.artstatus === 'pending'" style="margin-top: 60px; color: blue;">
