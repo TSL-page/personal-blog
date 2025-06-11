@@ -16,7 +16,6 @@ const emit = defineEmits(['success'])
 const onSubmit = async () => {
   const isEdit = formModel.value.categoryId
   if (isEdit) {
-    console.log(formModel.value.categoryId);
       await editCategory(formModel.value)
     ElMessage.success('编辑成功')
   }

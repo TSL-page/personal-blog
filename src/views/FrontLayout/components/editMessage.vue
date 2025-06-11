@@ -32,8 +32,6 @@ const handleSubmit = async() => {
     }
 
     const res = await updateUserMessage(submitData)
-    console.log('提交响应:', res)
-
     if (res.data?.code === '200') {
       userInfo.value = { ...userInfo.value, ...res.data.data }
       ElMessage.success('信息更新成功')

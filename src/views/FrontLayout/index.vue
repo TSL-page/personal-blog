@@ -41,7 +41,6 @@ const logout = () => {
       userStore.removeToken()
       router.push('/login')
     }).catch(() => {
-      console.log('取消退出登录')
     })
   }
 </script>

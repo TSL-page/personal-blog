@@ -60,7 +60,6 @@ const handleCommand = (command) => {
 onMounted(async() => {
   const res = await getUserMessage()
   userInfo.value = res.data.data
-  console.log(userInfo.value)
 })
 </script>
 

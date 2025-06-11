@@ -1,9 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { getUserMessage, updateUserMessage } from '@/api/user'
-import { ElForm, ElFormItem, ElInput } from 'element-plus' 
 import { ElMessage, ElMessageBox } from 'element-plus'
-
+import { formatTime } from '@/utils/format'
 const formModel = ref({})
 const UserMessageList = async () => {
   const res = await getUserMessage()
@@ -71,10 +70,10 @@ onMounted(() => {
         <el-input v-model="formModel.role" disabled></el-input>
       </el-form-item>
       <el-form-item label="注册时间">
-        <el-input v-model="formModel.registerTime" disabled></el-input>
+        <el-input :value="formatTime(formModel.registerTime)" disabled></el-input>
       </el-form-item>
       <el-form-item label="最后登录时间">
-        <el-input v-model="formModel.lastLoginTime" disabled></el-input>
+        <el-input :value="formatTime(formModel.lastLoginTime, 'YYYY-MM-DD HH:mm:ss')" disabled></el-input>
       </el-form-item>
       <el-form-item label="用户状态">
         <el-input v-model="formModel.status" disabled></el-input>
