@@ -20,7 +20,7 @@ const articleForm = ref({
   userId: 1,
   isTop: 0,
   categoryId: 2,
-  artstatus: 'draft',
+  artstatus: 'pending',
 })
 const editMode = ref('add')
 const currentEditArticle = ref(null)
@@ -50,7 +50,7 @@ const handleSaveArticle = async() => {
           userId: 1,
           isTop: 0,
           categoryId: 2,
-          artstatus: 'draft'
+          artstatus: 'pending'
         }
         isAddDialogVisible.value = false
         editMode.value = 'add'
