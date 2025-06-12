@@ -6,10 +6,9 @@ const dialogVisible = ref(false)
 const formRef = ref()
 const formModel = ref({
   categoryName: '',
-  categoryId: 8,
+  parentId: 8,
   description: '',
-  parentId: null,
-  sortOrder: null,
+  sortOrder: 0,
 })
 
 const emit = defineEmits(['success'])
@@ -20,9 +19,8 @@ const onSubmit = async () => {
     ElMessage.success('编辑成功')
   }
   else {
-    const addData = { ...formModel.value }
-    delete addData.categoryId
-    await addCategory(addData)
+    // 直接使用formModel，无需删除categoryId（已不存在）
+    await addCategory(formModel.value)
     ElMessage.success('添加成功')
   }
   dialogVisible.value = false
@@ -33,7 +31,13 @@ const onSubmit = async () => {
 const open = (row = {}) => {
   dialogVisible.value = true
   formModel.value.categoryName = row.categoryName || ''
-  formModel.value.categoryId = row.categoryId || ''
+  // 只在编辑模式设置categoryId
+  if (row.categoryId) {
+    formModel.value.categoryId = row.categoryId
+  } else {
+    // 添加模式下删除categoryId属性
+    delete formModel.value.categoryId
+  }
   formModel.value.description = row.description || ''
 }
 defineExpose({
@@ -48,8 +52,9 @@ defineExpose({
       <el-form-item label="分类名称" prop="categoryName">
         <el-input v-model="formModel.categoryName" placeholder="请输入分类名称"></el-input>
       </el-form-item>
-      <el-form-item label="分类Id" prop="categoryId">
-        <el-input v-model="formModel.categoryId" placeholder="请输入分类Id"></el-input>
+      <!-- 只在编辑模式显示分类ID输入框 -->
+      <el-form-item v-if="formModel.categoryId" label="分类Id" prop="categoryId">
+        <el-input v-model="formModel.categoryId" placeholder="请输入分类Id" disabled></el-input>
       </el-form-item>
       <el-form-item label="描述" prop="description">
         <el-input v-model="formModel.description" placeholder="请输入分类描述"></el-input>

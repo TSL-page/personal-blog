@@ -43,6 +43,7 @@ const handleSaveArticle = async() => {
         res = await addArticle({ title, content, userId, isTop, categoryId, artstatus })
       }
       if (res.data.code === "200") {
+        ElMessage.success('保存成功')
         await getArticle()
         articleForm.value = {
           title: '',
